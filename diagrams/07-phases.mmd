@@ -1,0 +1,19 @@
+%%{init: {"flowchart": {"rankSpacing": 30, "nodeSpacing": 24, "subGraphTitleMargin": {"top": 8, "bottom": 20}}}}%%
+flowchart LR
+    P0["Phase 0<br/>tag baseline v1-sync<br/>benchmark before"] --> P1["Phase 1<br/>contract tests lock<br/>API shapes"]
+    P1 --> P2["Phase 2<br/>Python async path<br/>ainvoke, to_thread,<br/>semaphore, cancel-safe"]
+    P2 --> P3["Phase 3<br/>async DB<br/>repository port<br/>SQLite to PostgreSQL"]
+    P3 --> P4["Phase 4<br/>Spring virtual threads<br/>bulkhead, breaker,<br/>202 + job"]
+    P4 --> P5["Phase 5<br/>benchmark after<br/>compare + write-up"]
+    class P0,P5 result
+    class P1 control
+    class P2,P3 python
+    class P4 java
+    classDef engineering fill:#18344b,stroke:#5ba7db,stroke-width:2px,color:#e6edf6
+    classDef python fill:#26313d,stroke:#a1afbf,stroke-width:2px,color:#e6edf6
+    classDef java fill:#1f3320,stroke:#8fcf86,stroke-width:2px,color:#e6f6e4
+    classDef ours fill:#2f3a14,stroke:#f2d16b,stroke-width:3px,color:#fff8dc
+    classDef worker fill:#4b2b22,stroke:#d39a6a,stroke-width:3px,color:#fff0e6
+    classDef control fill:#42351e,stroke:#ddb965,stroke-width:2px,color:#e6edf6
+    classDef result fill:#1a2837,stroke:#78d5ef,stroke-width:2px,color:#e6edf6
+    classDef stop fill:#40282d,stroke:#c58b92,stroke-width:2px,color:#e6edf6

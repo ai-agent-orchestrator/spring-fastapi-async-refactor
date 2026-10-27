@@ -1,0 +1,18 @@
+%%{init: {"flowchart": {"rankSpacing": 30, "nodeSpacing": 24, "subGraphTitleMargin": {"top": 8, "bottom": 20}}}}%%
+flowchart LR
+    LG["load generator<br/>async httpx<br/>10 / 50 / 200 concurrent"] --> APP["service under test<br/>v1-sync vs v2-async"]
+    APP --> FAKE["fake LLM<br/>fixed 2 s latency<br/>no cost"]
+    APP --> MET["measure: p50, p95, req/s,<br/>threads, memory, errors"]
+    MET --> REP["benchmarks/RESULTS.md<br/>before vs after table"]
+    class LG,REP result
+    class APP python
+    class FAKE worker
+    class MET control
+    classDef engineering fill:#18344b,stroke:#5ba7db,stroke-width:2px,color:#e6edf6
+    classDef python fill:#26313d,stroke:#a1afbf,stroke-width:2px,color:#e6edf6
+    classDef java fill:#1f3320,stroke:#8fcf86,stroke-width:2px,color:#e6f6e4
+    classDef ours fill:#2f3a14,stroke:#f2d16b,stroke-width:3px,color:#fff8dc
+    classDef worker fill:#4b2b22,stroke:#d39a6a,stroke-width:3px,color:#fff0e6
+    classDef control fill:#42351e,stroke:#ddb965,stroke-width:2px,color:#e6edf6
+    classDef result fill:#1a2837,stroke:#78d5ef,stroke-width:2px,color:#e6edf6
+    classDef stop fill:#40282d,stroke:#c58b92,stroke-width:2px,color:#e6edf6

@@ -1,0 +1,36 @@
+%%{init: {"flowchart": {"rankSpacing": 30, "nodeSpacing": 24, "subGraphTitleMargin": {"top": 8, "bottom": 20}}}}%%
+flowchart TB
+    C["Client · React<br/>POST, then SSE or poll"] --> S
+    subgraph SP["SPRING BOOT - Java 21 virtual threads"]
+        S["Controller<br/>one virtual thread per request"] --> J["Job accepted: 202 + jobId<br/>consultation saved first"]
+        J --> B["Bulkhead<br/>Semaphore(max in-flight to AI)"]
+        B --> CB["Circuit breaker + timeouts<br/>connect 2 s, read 30 s"]
+        CB --> RC["RestClient<br/>internal HMAC token<br/>Idempotency-Key header"]
+    end
+    RC --> E
+    subgraph PY["FASTAPI - asyncio event loop per worker"]
+        E["async def /v1/screenings"] --> G["guard + masking<br/>fast CPU, stays on loop"]
+        G --> V["vector search<br/>offloaded: asyncio.to_thread"]
+        V --> R["reserve credits<br/>async DB pool"]
+        R --> LS["LLM semaphore<br/>per provider limit"]
+        LS --> A["await chat_model.ainvoke<br/>timeout + cancel-safe"]
+        A --> ST["settle or release in finally"]
+    end
+    A --> M["LLM provider"]
+    ST --> DB[("PostgreSQL<br/>async pool")]
+    class C result
+    class S,J,B,CB,RC java
+    class E,G,V,R,ST python
+    class LS,A ours
+    class M worker
+    class DB control
+    classDef engineering fill:#18344b,stroke:#5ba7db,stroke-width:2px,color:#e6edf6
+    classDef python fill:#26313d,stroke:#a1afbf,stroke-width:2px,color:#e6edf6
+    classDef java fill:#1f3320,stroke:#8fcf86,stroke-width:2px,color:#e6f6e4
+    classDef ours fill:#2f3a14,stroke:#f2d16b,stroke-width:3px,color:#fff8dc
+    classDef worker fill:#4b2b22,stroke:#d39a6a,stroke-width:3px,color:#fff0e6
+    classDef control fill:#42351e,stroke:#ddb965,stroke-width:2px,color:#e6edf6
+    classDef result fill:#1a2837,stroke:#78d5ef,stroke-width:2px,color:#e6edf6
+    classDef stop fill:#40282d,stroke:#c58b92,stroke-width:2px,color:#e6edf6
+    style SP fill:#151e28,stroke:#8fcf86,stroke-width:1px,color:#e6edf6
+    style PY fill:#151e28,stroke:#a1afbf,stroke-width:1px,color:#e6edf6

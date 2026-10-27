@@ -1,0 +1,17 @@
+sequenceDiagram
+    autonumber
+    participant C as Client
+    participant S as Spring (virtual thread)
+    participant P as FastAPI (event loop)
+    participant L as LLM
+    C->>S: POST /consultations
+    S->>S: save consultation, create job
+    S-->>C: 202 Accepted + jobId
+    S->>P: POST /v1/screenings (Idempotency-Key = jobId)
+    P->>P: guard, mask, search (to_thread), reserve
+    P->>L: await ainvoke (loop serves other requests meanwhile)
+    L-->>P: JSON + usage
+    P->>P: settle, post-checks, save
+    P-->>S: report
+    S->>S: job DONE, store report
+    S-->>C: SSE "done" (or client polls GET /jobs/{id})
