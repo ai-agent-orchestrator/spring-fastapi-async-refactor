@@ -10,7 +10,7 @@ flowchart TB
     RC --> E
     subgraph PY["FASTAPI - asyncio event loop per worker"]
         E["async def /v1/screenings"] --> G["guard + masking<br/>fast CPU, stays on loop"]
-        G --> V["vector search<br/>offloaded: asyncio.to_thread"]
+        G --> V["memory search (memvid)<br/>offloaded: asyncio.to_thread"]
         V --> R["reserve credits<br/>async DB pool"]
         R --> LS["LLM semaphore<br/>per provider limit"]
         LS --> A["await chat_model.ainvoke<br/>timeout + cancel-safe"]

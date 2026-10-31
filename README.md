@@ -53,7 +53,7 @@ The refactor keeps every one of these rules; it changes **how waiting is done**,
 | --- | --- |
 | `async def` for I/O-bound routes | one event loop serves many requests while each one awaits |
 | `await chat_model.ainvoke(...)` | the LLM wait no longer holds a thread |
-| `asyncio.to_thread(...)` for CPU-heavy or sync-only work (vector search, parsing) | never block the loop: one blocking call freezes every request on that worker |
+| `asyncio.to_thread(...)` for CPU-heavy or sync-only work (memory search via memvid, parsing) | never block the loop: one blocking call freezes every request on that worker |
 | **LLM semaphore** per provider | respects provider rate limits; turns overload into a short wait instead of a storm of 429s |
 | `asyncio.timeout(...)` + **`finally: release()`** | timeouts, provider errors and client cancellation all return the reserved credits |
 | async DB pool behind the existing repository interface | SQLite in development, PostgreSQL (asyncpg) in production; route code does not change |
