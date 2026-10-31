@@ -9,7 +9,7 @@ The v1 sync behaviour must keep working until A5 says otherwise. Read ../README.
   asyncio.timeout(config llm_timeout_s, default 30); reserve before, settle on success, release in finally on ANY other
   outcome including asyncio.CancelledError (re-raise it after releasing). Per-provider asyncio.Semaphore (config, default 8).
 - ScreeningService.arun(...): same steps and order as run(); CPU-heavy or sync-only steps go through asyncio.to_thread
-  (vector search, repository calls until A3); guard and masking may stay on the loop (fast). Keep run() working.
+  (memory search via memvid, repository calls until A3); guard and masking may stay on the loop (fast). Keep run() working.
 - routes: POST /v1/screenings becomes async def and calls arun. Other routes stay as they are in this task.
 - Idempotency-Key header (optional): per tenant, store key -> screening id + response; a repeat returns the stored response
   with the same status and does NOT reserve or charge again; a concurrent duplicate waits for the first (lock per key).

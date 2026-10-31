@@ -172,7 +172,7 @@ flowchart TB
 flowchart LR
   Q{이 작업은?} -->|네트워크·DB 기다림| A[await 비동기 함수]
   Q -->|짧은 계산<br/>가드·마스킹| B[루프에서 그냥 실행]
-  Q -->|긴 계산·동기 라이브러리<br/>벡터 검색·PDF| C[await asyncio.to_thread]
+  Q -->|긴 계산·동기 라이브러리<br/>메모리 검색(memvid)·PDF| C[await asyncio.to_thread]
   Q -->|time.sleep · requests.get · 동기 DB| D[금지: 루프 전체 정지]
 ```
 
@@ -293,7 +293,7 @@ flowchart LR
         <tr><td>스레드</td><td>일을 처리하는 웨이터</td><td>지금 Python은 약 40명</td></tr>
         <tr><td>이벤트 루프</td><td>여러 테이블을 오가는 웨이터 한 명</td><td>uvicorn 작업자마다 1개</td></tr>
         <tr><td>await</td><td>"여기서 기다릴게, 그동안 딴 일 해"</td><td>LLM·DB·HTTP 호출 앞</td></tr>
-        <tr><td>to_thread</td><td>무거운 일을 옆 작업대로</td><td>벡터 검색</td></tr>
+        <tr><td>to_thread</td><td>무거운 일을 옆 작업대로</td><td>메모리 검색(memvid)</td></tr>
         <tr><td>가상 스레드</td><td>기다리면 투명해지는 웨이터</td><td>Spring 요청 처리</td></tr>
         <tr><td>세마포어 · 벌크헤드</td><td>동시에 들어갈 수 있는 인원 제한</td><td>LLM 동시 호출, Spring→Python 호출</td></tr>
         <tr><td>서킷 브레이커</td><td>고장 난 곳으로 계속 보내지 않는 차단기</td><td>Python이 느리면 대체 응답</td></tr>
