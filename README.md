@@ -112,3 +112,7 @@ Numbers are added to this README only after they are measured.
 | `STUDY_ko.md` | study notes in Korean: threads, event loop, virtual threads, cancel safety, with 12 diagrams |
 | `SPECS.md`, `specs/` | one spec per phase, as handed to the coding agent |
 | `diagrams/` | Mermaid sources (`.mmd`) and rendered `.svg` / `.png`, same dark theme as the orchestration repository |
+
+---
+
+Archived hybrid design material (Spring Boot + FastAPI + memvid), moved from the research repository: [docs/hybrid/](docs/hybrid/README.md).
